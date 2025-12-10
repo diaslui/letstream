@@ -23,5 +23,8 @@
   "bugs": {
     "url": "https://github.com/diaslui/letsream/issues"
   },
-  "homepage": "https://github.com/diaslui/letsream#readme"
+  "homepage": "https://github.com/diaslui/letsream#readme",
+  "dependencies": {
+    "ws": "^8.18.3"
+  }
 }
