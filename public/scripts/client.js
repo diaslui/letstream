@@ -1,3 +1,9 @@
+const configs = {
+  ws: undefined,
+  streamerSocketId: "",
+  watchersId: "",
+};
+
 const eRefs = {
   loader: ".loader",
   anyoneStreaming: ".anyone-streaming",
@@ -40,8 +46,53 @@ const startStreaming = async () => {
   });
   dRefs["videoDiv"].srcObject = stream;
   dRefs["videoDiv"].play();
-  const ws = new WebSocket(window.location.href.replace("http", "ws"))
 };
+
+const guiRefresh = () => {
+  console.log(configs)
+  if (configs.streamerSocketId == ""){
+    dRefs.anyoneStreaming.style.display = "flex"
+    dRefs.streamingDiv.style.display = "";
+
+  }
+
+}
+
+const updateStreamingStatus = (content) => {
+  configs.streamerSocketId = content["streamerSocketId"];
+  configs.watchersId = content["watchersId"];
+  guiRefresh();
+};
+
+const connectWs = () => {
+  configs.ws = new WebSocket(window.location.href.replace("http", "ws"));
+  configs.ws.onopen = (e) => {
+    configs.ws.send(
+      JSON.stringify({
+        event: "get-stream-status",
+      })
+    );
+  };
+
+  configs.ws.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    console.log(data);
+    switch (data.event) {
+      case "get-stream-status":
+        updateStreamingStatus(data.content);
+        break;
+    }
+  };
+
+  configs.ws.onclose = (e) => {
+    console.log("WebSocket connection closed:", e);
+  };
+
+  configs.ws.onerror = (err) => {
+    console.error("ws error:", err);
+  };
+};
+
 const init = async () => {
   await loadTagsRefs();
   loader(true);
@@ -53,7 +104,7 @@ const init = async () => {
       listener: startStreaming,
     },
   ]);
-
+  connectWs();
   loader(false);
 };
 

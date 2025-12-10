@@ -2,8 +2,10 @@ import http from "node:http";
 import { indexhandler } from "./handlers.js";
 import { log, solvePublic } from "./utils.js";
 import {WebSocketServer} from "ws";
+import {globalStream} from "./storage.js"
 
 const routes = [{ path: "/", handler: indexhandler }];
+
 
 const server = new http.Server((req, res) => {
 
@@ -29,6 +31,21 @@ const server = new http.Server((req, res) => {
 const wss = new WebSocketServer({server});
 wss.on("connection", (conn) =>{
   log(`new wss conn`, "info");
+
+  conn.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+
+    switch (data.event){
+      case "get-stream-status":
+        conn.send(JSON.stringify({
+          event: "get-stream-status",
+          content:globalStream.get()
+
+        }))
+        break
+    }
+
+  }
 
 })
 
