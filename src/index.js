@@ -6,9 +6,7 @@ const routes = [{ path: "/", handler: indexhandler }];
 
 const server = new http.Server((req, res) => {
   log(
-    `HTTP REQUEST - ${req.method} : ${req.url} => ${res.statusCode} ${
-      res.getHeaders()["content-type"]
-    } `,
+    `HTTP REQUEST - ${req.method} : ${req.url} => ${res.statusCode}`,
     "info"
   );
   const thisPath = routes.find((route) => req.url == route.path);
