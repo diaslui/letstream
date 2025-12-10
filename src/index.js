@@ -1,10 +1,16 @@
 import http from "node:http";
 import { indexhandler } from "./handlers.js";
-import { log } from "./utils.js";
+import { log, solvePublic } from "./utils.js";
 
 const routes = [{ path: "/", handler: indexhandler }];
 
 const server = new http.Server((req, res) => {
+
+  if (req.url.startsWith("/assets")){
+    solvePublic(req,res);
+    return;
+  };
+
   log(
     `HTTP REQUEST - ${req.method} : ${req.url} => ${res.statusCode}`,
     "info"
