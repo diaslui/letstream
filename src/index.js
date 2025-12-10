@@ -23,6 +23,6 @@ const server = new http.Server((req, res) => {
 
 const PORT = 12219;
 server.listen(PORT, "0.0.0.0", () => {
-  log(`to more info acess https://github.com/diaslui/letsream.git`, "alert");
+  log(`to more info acess https://github.com/diaslui/letstream.git`, "alert");
   log(`http server listening on http://0.0.0.0:${PORT}`, "alert");
 });
