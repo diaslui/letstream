@@ -1,11 +1,12 @@
 import http from "node:http";
 import { indexhandler } from "./handlers.js";
+import {log} from "./utils.js"
 
 const routes = [{ path: "/", handler: indexhandler }];
 
 const server = new http.Server((req, res) => {
+    
   const thisPath = routes.find((route) => req.url == route.path);
-  console.log(thisPath)
   if (thisPath) {
     console.log("is")
     thisPath.handler(req, res);
@@ -18,5 +19,5 @@ const server = new http.Server((req, res) => {
 
 const PORT = 12219;
 server.listen(PORT, "0.0.0.0", () => {
-  console.log(`listening on http://0.0.0.0:${PORT}`);
+  log(`listening on http://0.0.0.0:${PORT}`, "info");
 });
